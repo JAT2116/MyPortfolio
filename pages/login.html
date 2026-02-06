@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - jeHIEL.Tech</title>
+    <!-- Assuming your main stylesheet is in the root MyPortfolio folder -->
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        /* Add some basic login form styling */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #081b29;
+            background-image: url('../mm.jpeg');
+            background-size: cover;
+        }
+        .login-container {
+            background: #112e42;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(18, 247, 255, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .login-container h1 {
+            color: #12f7ff;
+            margin-bottom: 1.5rem;
+        }
+        .login-container input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            border: 1px solid #12f7ff;
+            background: #081b29;
+            color: #ededed;
+            box-sizing: border-box;
+        }
+        .login-container .btn-box {
+            width: 100%;
+            justify-content: center;
+        }
+        #error-message {
+            color: #ff4d4d;
+            margin-top: 1rem;
+            min-height: 1.2em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h1>Admin Login</h1>
+        <form id="login-form">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <div class="btn-box">
+                <button type="submit" class="btn">Login</button>
+            </div>
+        </form>
+        <p id="error-message"></p>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+            const errorMessageElement = document.getElementById('error-message');
+
+            fetch('login.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirect to the admin dashboard on successful login
+                    window.location.href = '../admin/admin.php';
+                } else {
+                    // Display error message
+                    errorMessageElement.textContent = data.message || 'An unknown error occurred.';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                errorMessageElement.textContent = 'A network error occurred. Please try again.';
+            });
+        });
+    </script>
+
+</body>
+</html>
